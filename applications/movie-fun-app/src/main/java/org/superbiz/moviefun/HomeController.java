@@ -5,9 +5,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.superbiz.moviefun.albums.Album;
 import org.superbiz.moviefun.albums.AlbumFixtures;
 import org.superbiz.moviefun.albums.AlbumsBean;
-import org.superbiz.moviefun.movies.Movie;
-import org.superbiz.moviefun.movies.MovieFixtures;
-import org.superbiz.moviefun.movies.MoviesBean;
 
 import java.util.Map;
 
