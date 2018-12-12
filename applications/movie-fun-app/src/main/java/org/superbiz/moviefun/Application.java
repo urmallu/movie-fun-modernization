@@ -8,9 +8,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestOperations;
+import org.springframework.web.client.RestTemplate;
+import org.superbiz.moviefun.albumsapi.AlbumsClient;
 import org.superbiz.moviefun.blobstore.BlobStore;
 import org.superbiz.moviefun.blobstore.S3Store;
-import org.superbiz.moviefun.movies.MovieServlet;
+import org.superbiz.moviefun.moviesapi.MovieServlet;
+import org.superbiz.moviefun.moviesapi.MoviesClient;
 
 @SpringBootApplication
 public class Application {
@@ -31,8 +36,8 @@ public class Application {
 
     @Bean
     public BlobStore blobStore(
-        ServiceCredentials serviceCredentials,
-        @Value("${vcap.services.photo-storage.credentials.endpoint:#{null}}") String endpoint
+            ServiceCredentials serviceCredentials,
+            @Value("${vcap.services.photo-storage.credentials.endpoint:#{null}}") String endpoint
     ) {
         String photoStorageAccessKeyId = serviceCredentials.getCredential("photo-storage", "user-provided", "access_key_id");
         String photoStorageSecretKey = serviceCredentials.getCredential("photo-storage", "user-provided", "secret_access_key");
@@ -46,5 +51,23 @@ public class Application {
         }
 
         return new S3Store(s3Client, photoStorageBucket);
+    }
+
+    @Value("${movies.url}") String moviesUrl;
+    @Value("${albums.url}") String albumsUrl;
+
+    @Bean
+    public RestOperations restOperations() {
+        return new RestTemplate();
+    }
+
+    @Bean
+    public MoviesClient moviesClient(RestOperations restOperations) {
+        return new MoviesClient(moviesUrl, restOperations);
+    }
+
+    @Bean
+    public AlbumsClient albumsClient(RestOperations restOperations) {
+        return new AlbumsClient(albumsUrl, restOperations);
     }
 }

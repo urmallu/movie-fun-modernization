@@ -1,6 +1,11 @@
 rootProject.name = "moviefun"
 
-include "applications:movie-fun-app"
-
+include "components:album-api"
 include "components:albums"
+include "components:blobstore"
+include "components:movie-fun-api"
+include "components:cf-support"
 include "components:movies"
+include "applications:movie-service"
+include "applications:album-service"
+include "applications:movie-fun-app"
